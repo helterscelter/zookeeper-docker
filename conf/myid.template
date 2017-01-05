@@ -1,0 +1,8 @@
+{{ range $ }}
+{{if  eq .ID $.Docker.CurrentContainerID }}
+{{  $id := index .Labels "com.docker.compose.container-number" }}
+{{  if $id }}
+{{    $id }}
+{{  end }}
+{{ end }}
+{{end}}

@@ -1,0 +1,56 @@
+{{ range $ }}
+{{ if  eq .ID $.Docker.CurrentContainerID }}
+{{   index .Labels "com.docker.compose.container-number" }}
+
+# The number of milliseconds of each tick
+tickTime={{ coalesce .Env.ZK_TICKTIME "2000" }}
+
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit={{ coalesce .Env.ZK_INITLIMIT "10" }}
+
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit={{ coalesce .Env.ZK_SYNCLIMIT "5" }}
+
+
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+dataDir={{ coalesce .Env.ZK_DATADIR "/tmp/zookeeper" }}
+dataLogDir={{ coalesce .Env.ZK_DATALOGDIR .Env.ZK_DATADIR "/tmp/zookeeper" }}
+
+# the port at which the clients will connect
+clientPort={{ coalesce .Env.ZK_CLIENTPORT "2181" }}
+
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns={{ coalesce .Env.ZK_MAXCLIENTCNXNS "60" }}
+
+#
+# Be sure to read the maintenance section of the 
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount={{ coalesce .Env.ZK_AUTOPURGE_SNAPRETAINCOUNT "3" }}
+
+
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+autopurge.purgeInterval={{ coalesce .Env.ZK_AUTOPURGE_PURGEINTERVAL "1" }}
+
+
+{{  end}}
+{{end}}
+
+# dynamic ZK hosts that make up the cluster
+{{ range $index, $container := whereLabelValueMatches $ "com.docker.compose.service" "zookeeper" }}
+    {{ $network := first $container.Networks }}
+    {{ $id := index $container.Labels "com.docker.compose.container-number" }}
+    {{ if $id }}
+server.{{ $id }}={{ $network.IP }}:2888:3888
+    {{ end }}
+{{ end }}
+

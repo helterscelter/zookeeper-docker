@@ -1,0 +1,8 @@
+version: '2.1'
+services:
+  zookeeper:
+    image: helterscelter/zk
+    expose:
+      - "2181"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

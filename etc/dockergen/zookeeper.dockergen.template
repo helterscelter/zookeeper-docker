@@ -1,0 +1,18 @@
+[[config]]
+template = "${ZK_CONFIGDIR}/myid.template"
+dest = "${ZK_DATADIR}/myid"
+onlyexposed = true
+includestopped = true
+watch = true
+wait = "500ms:2s"
+
+
+[[config]]
+template = "${ZK_CONFIGDIR}/zoo.cfg.template"
+dest = "${ZK_CONFIGDIR}/zoo.cfg"
+onlyexposed = true
+includestopped = true
+notifycmd = "chown -R zookeeper:zookeeper ${ZK_DATALOGDIR} ${ZK_DATADIR} ${ZK_CONFIGDIR} && supervisorctl restart zookeeper"
+watch = true
+wait = "500ms:2s"
+
