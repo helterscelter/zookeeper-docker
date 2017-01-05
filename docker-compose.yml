@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   zookeeper:
-    image: helterscelter/zk
+    image: helterscelter/zookeeper
     expose:
       - "2181"
     volumes:
