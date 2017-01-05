@@ -54,6 +54,6 @@ RUN /usr/bin/template.sh /etc/dockergen/zookeeper.dockergen.template /etc/docker
 
 EXPOSE 2181 2888 3888
 
-VOLUME [ ${ZK_DATALOGDIR}, ${ZK_DATADIR}, ${ZK_CONFIGDIR} ]
+VOLUME [ "${ZK_DATALOGDIR}" , "${ZK_DATADIR}" , "${ZK_CONFIGDIR}" ]
 
 CMD ["supervisord","-c","/etc/supervisor/supervisord.conf"]
